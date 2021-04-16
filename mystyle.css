@@ -1,0 +1,43 @@
+.CTA2 {
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 65px;
+  margin-bottom: 20px;
+  max-width: 680px;
+}
+
+.content {
+  display: flex;
+  margin-left: 65px;
+  width: 1500px;
+}
+
+.tables {
+  display: flex-start;
+  margin: none;
+  padding: none;
+  width: 1000px;
+}
+
+.earnings {
+  margin-top: 20px;
+}
+h1 {
+  display: flex;
+  margin-left: 100px;
+}
+
+* {
+  margin: 20px;
+}
+
+.CTA {
+  display: flex;
+  justify-content: flex-start;
+  max-width: 680px;
+}
+
+.form {
+  margin-left: 65px;
+  width: 1000px;
+}
