@@ -22,7 +22,6 @@ session_start();
     ?>
 
     <div class=CTAS>
-        <a class="btn btn-dark btn-sm" href="form_new_worker.php"> Ajouter un salarié</a>
         <a class="btn btn-dark btn-sm" href="deconnexion.php"> Se déconnecter</a>
     </div>
 
