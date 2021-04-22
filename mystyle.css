@@ -6,6 +6,11 @@
   max-width: 680px;
 }
 
+.test {
+  color: red;
+  font-size: 30px;
+}
+
 .content {
   display: flex;
   margin-left: 65px;
@@ -37,7 +42,58 @@ h1 {
   max-width: 680px;
 }
 
+.CTAS {
+  display: flex;
+  margin-left: 65px;
+}
+
 .form {
   margin-left: 65px;
   width: 1000px;
+}
+
+.all_content {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.connexion {
+  margin-left: 50px;
+  margin-right: 20px;
+  width: 400px;
+}
+
+.case {
+  width: 300px;
+  height: 40px;
+  font-size: 1.1em;
+}
+
+.button {
+  width: 300px;
+  height: 40px;
+  border: none;
+  margin-left: 20px;
+  color: white;
+  background-color: #000000;
+}
+
+.join_us {
+  font-size: 1.3em;
+  margin-left: 20px;
+}
+
+.fail_connexion {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.insert_account {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

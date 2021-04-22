@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,6 +15,11 @@
 </head>
 
 <body>
+    <?php
+    if (!isset($_SESSION['email'])) {
+        header('Location: form_connexion.php');
+    }
+    ?>
 
     <?php
     $bdd = mysqli_init();

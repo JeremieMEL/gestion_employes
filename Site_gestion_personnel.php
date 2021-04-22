@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,19 +16,25 @@
 
 <body>
 
-    <div class=CTA2>
-        <a class="btn btn-dark btn-sm" href="form_new_worker.php"> Ajouter un salarié</a>
-    </div>
+    <?php
+    if (!isset($_SESSION['email'])) {
+        header('Location: form_connexion.php');
+    }
+    ?>
 
+    <div class=CTAS>
+        <a class="btn btn-dark btn-sm" href="form_new_worker.php"> Ajouter un salarié</a>
+        <a class="btn btn-dark btn-sm" href="deconnexion.php"> Se déconnecter</a>
+    </div>
 
     <?php
     $bdd = mysqli_init();
     mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-    $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, noserv FROM employes;");
+    $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, noserv, date_ajout FROM employes;");
+    $sup = mysqli_query($bdd, "SELECT DISTINCT sup FROM employes WHERE sup IS NOT NULL;");
     $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    //var_dump($tab);
-    // var_dump($tab[0]);
-    //var_dump($tab[0]["nom"]);
+    $tab2 = mysqli_fetch_all($sup, MYSQLI_ASSOC);
+    //var_dump($tab2);
     ?>
 
     <div class="content">
@@ -40,8 +50,12 @@
 
 
             <?php
+            foreach ($tab2 as $valeur) {
+                $tabSup[] = $valeur["sup"];
+            }
+
+
             for ($i = 0; $i < count($tab); $i++) {
-                $nom = $tab[0]['nom'];
 
                 echo "<tr>";
                 echo "<td hidden>" . $tab[$i]['noemp'] . "</td>";
@@ -52,7 +66,12 @@
                 echo "<td>" . $tab[$i]['noserv'] . "</td>";
                 echo "<td><a href='detail.php?id=" . $tab[$i]['noemp'] . "'><button class='btn btn-warning'>Detail</button></a></td>";
                 echo "<td><a href='form_modification.php?id=" . $tab[$i]['noemp'] . "'><button class='btn btn-warning'>Modifier</button></a></td>";
-                echo "<td><a href='supprimer.php?id=" . $tab[$i]['noemp'] . "'><button class='btn btn-warning'>Supprimer</button></a></td>";
+                if (in_array($tab[$i]['noemp'], $tabSup)) {
+                    echo "<td></td>";
+                } else {
+                    echo "<td><a href='supprimer.php?id=" . $tab[$i]['noemp'] . "'><button class='btn btn-warning'>Supprimer</button></a></td>";
+                }
+                echo "<td hidden>" . $tab[$i]['date_ajout'] . "</td>";
                 echo "</tr>";
             }
             ?>
@@ -60,6 +79,19 @@
         </table>
     </div>
 
+    <div class="content">
+        <table class="table table-dark table-striped">
+            <?php
+            $query3 = mysqli_query($bdd, "SELECT COUNT(date_ajout) FROM employes WHERE date_ajout = DATE_FORMAT(SYSDATE(),'%Y-%m-%d');");
+            $tab3 = mysqli_fetch_all($query3, MYSQLI_ASSOC);
+            foreach ($tab3 as $number) {
+                $resultCount[] = $number['COUNT(date_ajout)'];
+            }
+
+            echo "<td>Nombre d'ajout aujourd'hui: " . $resultCount[0] . "</td>";
+            ?>
+        </table>
+    </div>
 </body>
 
 </html>

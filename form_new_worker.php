@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +15,11 @@
 </head>
 
 <body>
-
+    <?php
+    if (!isset($_SESSION['email'])) {
+        header('Location: form_connexion.php');
+    }
+    ?>
 
     <form action="ajouter.php" method="post">
         <div class="form">
@@ -40,7 +48,7 @@
             </div>
             <div class="mb-3">
                 <label for="comm" class="form-label">Commission :</label>
-                <input type="text" class="form-control" id="comm" name="comm" placeholder="Votre Commission">
+                <input type="text" class="form-control" id="comm" name="comm" placeholder="Votre Commission" required>
             </div>
             <div class="mb-3">
                 <label for="noserv" class="form-label">Numéro de votre service :</label>

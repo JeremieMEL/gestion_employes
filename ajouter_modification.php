@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +18,12 @@
 
 
     <?php
-    header('Location: site_gestion_personnel.php');
+
+    if (!isset($_SESSION['email'])) {
+        header('Location: form_connexion.php');
+    } else {
+        header('Location: site_gestion_personnel.php');
+    }
 
 
     $bdd = mysqli_init();

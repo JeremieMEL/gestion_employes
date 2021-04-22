@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,14 +16,21 @@
 
 <body>
 
-
     <?php
-    header('Location: site_gestion_personnel.php');
+    if (!isset($_SESSION['email'])) {
+        header('Location: form_connexion.php');
+    } else {
+        header('Location: site_gestion_personnel.php');
+    }
 
 
     $bdd = mysqli_init();
     mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
     $insert = mysqli_query($bdd, "DELETE FROM employes WHERE noemp='$_GET[id]';");
+
+
+
+
 
     ?>
 
