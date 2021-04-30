@@ -24,15 +24,10 @@ session_start();
     <?php
     //header('Location: site_gestion_personnel.php');
 
-    $bdd = mysqli_init();
-    mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
 
     if (preg_match("#[^\D]#", $_POST['sup']) && preg_match("#[^\D]#", $_POST['noserv'])) {
-        $insert = mysqli_query($bdd, "INSERT INTO employes (noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv, date_ajout)
-        SELECT MAX(noemp)+1, " . "'" . $_POST['nom'] . "', '" . $_POST['prenom'] . "', '" . $_POST['emploi'] . "', " . $_POST['sup'] . ", sysdate(), " . $_POST['sal'] . ", " . $_POST['comm'] . ", " . $_POST['noserv'] . ", sysdate() " . " FROM employes;");
-
+        Ajout_Employee($_POST['sup'], $_POST['noserv'], $_POST['nom'], $_POST['prenom'], $_POST['emploi'], $_POST['sal'], $_POST['comm']);
         echo "<p>Votre ajout a été correctement exécuté.</p>";
-        var_dump($test);
     } else {
         echo "<p>Vérifier saisie<p>";
         echo "<form action='ajouter.php' method='post'>
@@ -75,8 +70,15 @@ session_start();
     </form>";
     }
 
-    // $insert = mysqli_query($bdd, "INSERT INTO employes (noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv)
-    // SELECT MAX(noemp)+1, " . "'" . $_POST['nom'] . "', '" . $_POST['prenom'] . "', '" . $_POST['emploi'] . "', " . $_POST['sup'] . ", sysdate(), " . $_POST['sal'] . ", " . $_POST['comm'] . ", " . $_POST['noserv'] . " FROM employes;");
+
+    function Ajout_Employee($sup, $noServ, $nom, $prenom, $emploi, $sal, $comm)
+    {
+        $bdd = mysqli_init();
+        mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
+        $insert = mysqli_query($bdd, "INSERT INTO employes (noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv, date_ajout)
+        SELECT MAX(noemp)+1, " . "'" . $nom . "', '" . $prenom . "', '" . $emploi . "', " . $sup . ", sysdate(), " . $sal . ", " . $comm . ", " . $noServ . ", sysdate() " . " FROM employes;");
+        mysqli_close($bdd);
+    }
 
     ?>
 

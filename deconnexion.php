@@ -21,13 +21,19 @@ session_start();
         header('Location: form_connexion.php');
     }
 
-    unset($_SESSION);
-    unset($_COOKIE);
-    session_destroy();
+    logout();
 
     echo "<div class='fail_connexion'>
                 <div><p>Vous vous êtes déconnecté avec succès.</p></div>
                 <div><a class='btn btn-dark btn-sm' href='form_connexion.php'>Retour</a></div>
                 </div>";
+
+    function logOut()
+    {
+        unset($_SESSION);
+        unset($_COOKIE);
+        session_destroy();
+    }
+
     ?>
 </body>

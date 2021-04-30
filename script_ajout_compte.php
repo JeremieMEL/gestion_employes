@@ -32,6 +32,12 @@ session_start();
                     <div><p>Votre compte a été créé avec succès.</p></div>
                     <div><a class='btn btn-dark btn-sm' href='form_connexion.php'>Se connecter</a></div>
                     </div>";
+
+
+    $user = mysqli_query($bdd, "INSERT INTO users (id,pseudo,mail,pass ) 
+    SELECT MAX(id)+1, " . "'" . $_POST['pseudo'] . "','" . $_POST['mail'] . "','" . $mdp . "' FROM users;");
+
+
     ?>
 
 </body>

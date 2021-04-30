@@ -26,12 +26,14 @@ session_start();
     </div>
 
     <?php
-    $bdd = mysqli_init();
-    mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-    $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, noserv, date_ajout FROM employes;");
-    $sup = mysqli_query($bdd, "SELECT DISTINCT sup FROM employes WHERE sup IS NOT NULL;");
-    $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    $tab2 = mysqli_fetch_all($sup, MYSQLI_ASSOC);
+    $tab = selectAll();
+
+    // $bdd = mysqli_init();
+    // mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
+    // $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, noserv, date_ajout FROM employes;");
+    // $sup = mysqli_query($bdd, "SELECT DISTINCT sup FROM employes WHERE sup IS NOT NULL;");
+    // $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    // $tab2 = mysqli_fetch_all($sup, MYSQLI_ASSOC);
     //var_dump($tab2);
     ?>
 
@@ -48,9 +50,6 @@ session_start();
 
 
             <?php
-            foreach ($tab2 as $valeur) {
-                $tabSup[] = $valeur["sup"];
-            }
 
 
             for ($i = 0; $i < count($tab); $i++) {
@@ -65,6 +64,16 @@ session_start();
                 echo "<td hidden>" . $tab[$i]['date_ajout'] . "</td>";
                 echo "</tr>";
             }
+
+            function selectAll()
+            {
+                $bdd = mysqli_init();
+                mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
+                $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, noserv, date_ajout FROM employes;");
+                $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                return $tab;
+            }
+
             ?>
 
         </table>
@@ -73,12 +82,13 @@ session_start();
     <div class="content">
         <table class="table table-dark table-striped">
             <?php
+            $bdd = mysqli_init();
+            mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
             $query3 = mysqli_query($bdd, "SELECT COUNT(date_ajout) FROM employes WHERE date_ajout = DATE_FORMAT(SYSDATE(),'%Y-%m-%d');");
             $tab3 = mysqli_fetch_all($query3, MYSQLI_ASSOC);
             foreach ($tab3 as $number) {
                 $resultCount[] = $number['COUNT(date_ajout)'];
             }
-
             echo "<td>Nombre d'ajout aujourd'hui: " . $resultCount[0] . "</td>";
             ?>
         </table>

@@ -19,14 +19,8 @@ session_start();
     if (!isset($_SESSION['email'])) {
         header('Location: form_connexion.php');
     }
-    ?>
 
-    <?php
-    $bdd = mysqli_init();
-    mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-    $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv FROM employes WHERE noemp='$_GET[id]';");
-    $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    //var_dump($tab);
+    $tab = modifierEmploye($_GET['id']);
     ?>
 
     <form action="ajouter_modification.php" method="post">
@@ -75,6 +69,17 @@ session_start();
         </div>
     </form>
 
+    <?php
+    function modifierEmploye($id)
+    {
+        $bdd = mysqli_init();
+        mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
+        $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv FROM employes WHERE noemp='$id';");
+        $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        mysqli_close($bdd);
+        return $tab;
+    }
+    ?>
 
 
 

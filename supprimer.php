@@ -20,6 +20,22 @@ session_start();
     if (!isset($_SESSION['email'])) {
         header('Location: form_connexion.php');
     } else {
+        deleteEmploye($_GET['id']);
+        header('Location: site_gestion_personnel.php');
+    }
+
+    function deleteEmploye($id)
+    {
+        $bdd = mysqli_init();
+        mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
+        $insert = mysqli_query($bdd, "DELETE FROM employes WHERE noemp='$id';");
+        mysqli_close($bdd);
+    }
+
+
+    if (!isset($_SESSION['email'])) {
+        header('Location: form_connexion.php');
+    } else {
         header('Location: site_gestion_personnel.php');
     }
 
@@ -27,6 +43,8 @@ session_start();
     $bdd = mysqli_init();
     mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
     $insert = mysqli_query($bdd, "DELETE FROM employes WHERE noemp='$_GET[id]';");
+
+
 
 
 

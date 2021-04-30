@@ -21,12 +21,9 @@ session_start();
         header('Location: form_connexion.php');
     }
 
+    $tab = detail($_GET['id']);
 
-    $bdd = mysqli_init();
-    mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-    $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv FROM employes WHERE noemp='$_GET[id]';");
-    $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    //var_dump($tab);
+
     ?>
 
     <div class="content">
@@ -70,6 +67,17 @@ session_start();
     <div class=CTA2>
         <a class="btn btn-dark btn-sm" href="Site_gestion_personnel.php"> Revenir à la liste</a>
     </div>
+
+    <?php
+    function detail($id)
+    {
+        $bdd = mysqli_init();
+        mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
+        $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv FROM employes WHERE noemp='$id';");
+        $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        return $tab;
+    }
+    ?>
 
 </body>
 

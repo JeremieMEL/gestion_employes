@@ -13,15 +13,12 @@
 <body>
     <?php
 
-    if (!isset($_SESSION['email'])) {
-        header('Location: form_connexion.php');
-    }
+    // if (!isset($_SESSION['email'])) {
+    //     header('Location: form_connexion.php');
+    // }
 
+    $tab = connexion($_POST['email']);
 
-    $bdd = mysqli_init();
-    mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-    $result = mysqli_query($bdd, "SELECT hash, status FROM privileges WHERE email='" . $_POST['email'] . "';");
-    $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
     for ($i = 0; $i < count($tab); $i++) {
 
@@ -41,6 +38,18 @@
                 </div>";
         }
     }
+
+    function connexion($email)
+    {
+        $bdd = mysqli_init();
+        mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
+        $result = mysqli_query($bdd, "SELECT hash, status FROM privileges WHERE email='$email';");
+        $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        mysqli_close($bdd);
+        return $tab;
+    }
+
+
     // echo "</br> Mot de pass entré par l'utilisateur hashé : " . $pass_hache;
     // echo "</br> Hashage recupéré en bdd : " . $tab[0]['hash'];
     // echo "</br> Adresse email entrée par l'utilisateur : " . $_POST['email'];
