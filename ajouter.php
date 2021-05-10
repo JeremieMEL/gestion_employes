@@ -26,7 +26,7 @@ session_start();
 
 
     if (preg_match("#[^\D]#", $_POST['sup']) && preg_match("#[^\D]#", $_POST['noserv'])) {
-        Ajout_Employee($_POST['sup'], $_POST['noserv'], $_POST['nom'], $_POST['prenom'], $_POST['emploi'], $_POST['sal'], $_POST['comm']);
+        Ajout_Employee($_POST['nom'], $_POST['prenom'], $_POST['emploi'], $_POST['sup'],  $_POST['sal'],  $_POST['comm'], $_POST['noserv']);
         echo "<p>Votre ajout a été correctement exécuté.</p>";
     } else {
         echo "<p>Vérifier saisie<p>";
@@ -70,14 +70,31 @@ session_start();
     </form>";
     }
 
+    // Fonction procédurale
+    // function Ajout_Employee($sup, $noServ, $nom, $prenom, $emploi, $sal, $comm)
+    // {
+    //     $bdd = mysqli_init();
+    //     mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
+    //     $insert = mysqli_query($bdd, "INSERT INTO employes (noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv, date_ajout)
+    //     SELECT MAX(noemp)+1, " . "'" . $nom . "', '" . $prenom . "', '" . $emploi . "', " . $sup . ", sysdate(), " . $sal . ", " . $comm . ", " . $noServ . ", sysdate() " . " FROM employes;");
+    //     mysqli_close($bdd);
+    // }
 
-    function Ajout_Employee($sup, $noServ, $nom, $prenom, $emploi, $sal, $comm)
+    //Fonction Orientée Objet
+    function Ajout_Employee($nom, $prenom, $emploi, $sup, $sal, $comm, $noServ)
     {
-        $bdd = mysqli_init();
-        mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-        $insert = mysqli_query($bdd, "INSERT INTO employes (noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv, date_ajout)
-        SELECT MAX(noemp)+1, " . "'" . $nom . "', '" . $prenom . "', '" . $emploi . "', " . $sup . ", sysdate(), " . $sal . ", " . $comm . ", " . $noServ . ", sysdate() " . " FROM employes;");
-        mysqli_close($bdd);
+        // $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
+        // $sql = "INSERT INTO employes (noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv, date_ajout)
+        // SELECT MAX(noemp)+1, " . "'" . $nom . "', '" . $prenom . "', '" . $emploi . "', " . $sup . ", sysdate(), " . $sal . ", " . $comm . ", " . $noServ . ", sysdate() " . " FROM employes;";
+        // $rs = $mysqli->query($sql);
+        // $mysqli->close();
+
+        $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
+        $stmt = $mysqli->prepare("INSERT INTO employes (noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv, date_ajout)
+        SELECT MAX(noemp)+1, ?, ?, ?, ?, sysdate(), ?, ?, ?, sysdate() FROM employes;");
+        $stmt->bind_param("sssidii", $nom, $prenom,  $emploi,  $sup,  $sal, $comm, $noServ);
+        $stmt->execute();
+        $mysqli->close();
     }
 
     ?>

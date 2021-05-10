@@ -20,32 +20,55 @@
     $tab = connexion($_POST['email']);
 
 
-    for ($i = 0; $i < count($tab); $i++) {
+    // for ($i = 0; $i < count($tab); $i++) {
 
-        if (password_verify($_POST['user_password'], $tab[$i]['hash'])) {
-            session_start();
-            $_SESSION['email'] = $_POST['email'];
+    if (password_verify($_POST['user_password'], $tab['hash'])) {
+        session_start();
+        $_SESSION['email'] = $_POST['email'];
 
-            if ($tab[$i]['status'] == 'admin') {
-                header('Location: site_gestion_personnel.php');
-            } else {
-                header('Location: site_gestion_personnel_user.php');
-            }
+        if ($tab['status'] == 'admin') {
+            header('Location: site_gestion_personnel.php');
         } else {
-            echo "<div class='fail_connexion'>
+            header('Location: site_gestion_personnel_user.php');
+        }
+    } else {
+        echo "<div class='fail_connexion'>
                 <div><p>Mot de passe invalide</p></div>
                 <div><a class='btn btn-dark btn-sm' href='form_connexion.php'>Retour</a></div>
                 </div>";
-        }
     }
+    // }
 
+    // Fonction procédurale
+    // function connexion($email)
+    // {
+    //     $bdd = mysqli_init();
+    //     mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
+    //     $result = mysqli_query($bdd, "SELECT hash, status FROM privileges WHERE email='$email';");
+    //     $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    //     mysqli_close($bdd);
+    //     return $tab;
+    // }
+
+    // Fonction Orientée Objet
     function connexion($email)
     {
-        $bdd = mysqli_init();
-        mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-        $result = mysqli_query($bdd, "SELECT hash, status FROM privileges WHERE email='$email';");
-        $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        mysqli_close($bdd);
+        // $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
+        // $sql = "SELECT hash, status FROM privileges WHERE email='$email';";
+        // $rs = $mysqli->query($sql);
+        // $tab = $rs->fetch_all(MYSQLI_ASSOC);
+        // return $tab;
+        // $rs->free();
+        // $mysqli->close();
+
+        $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
+        $stmt = $mysqli->prepare("SELECT hash, status FROM privileges WHERE email=?;");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $rs = $stmt->get_result();
+        $tab = $rs->fetch_array(MYSQLI_ASSOC);
+        $rs->free();
+        $mysqli->close();
         return $tab;
     }
 

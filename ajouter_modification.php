@@ -26,13 +26,28 @@ session_start();
         header('Location: site_gestion_personnel.php');
     }
 
+    //Fonction procédurale
+    // function updateBdd($nom, $prenom, $emploi, $sup, $sal, $comm, $noserv, $noemp)
+    // {
+    //     $bdd = mysqli_init();
+    //     mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
+    //     $insert = mysqli_query($bdd, "UPDATE employes SET nom='$nom', prenom='$prenom', emploi='$emploi', sup='$sup', sal='$sal', comm='$comm', noserv='$noserv' WHERE noemp='$noemp';");
+    //     mysqli_close($bdd);
+    // }
 
+    //Fonction Orientée Objet
     function updateBdd($nom, $prenom, $emploi, $sup, $sal, $comm, $noserv, $noemp)
     {
-        $bdd = mysqli_init();
-        mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-        $insert = mysqli_query($bdd, "UPDATE employes SET nom='$nom', prenom='$prenom', emploi='$emploi', sup='$sup', sal='$sal', comm='$comm', noserv='$noserv' WHERE noemp='$noemp';");
-        mysqli_close($bdd);
+        // $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
+        // $sql = "UPDATE employes SET nom='$nom', prenom='$prenom', emploi='$emploi', sup='$sup', sal='$sal', comm='$comm', noserv='$noserv' WHERE noemp='$noemp';";
+        // $rs = $mysqli->query($sql);
+        // $mysqli->close();
+
+        $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
+        $stmt = $mysqli->prepare("UPDATE employes SET nom=?, prenom=?, emploi=?, sup=?, sal=?, comm=?, noserv=? WHERE noemp=?;");
+        $stmt->bind_param("sssiddii", $nom, $prenom, $emploi, $sup, $sal, $comm, $noserv, $noemp);
+        $stmt->execute();
+        $mysqli->close();
     }
     ?>
 

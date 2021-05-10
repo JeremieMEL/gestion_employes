@@ -24,12 +24,21 @@ session_start();
         header('Location: site_gestion_personnel.php');
     }
 
+    // function deleteEmploye($id)
+    // {
+    //     $bdd = mysqli_init();
+    //     mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
+    //     mysqli_query($bdd, "DELETE FROM employes WHERE noemp='$id';");
+    //     mysqli_close($bdd);
+    // }
+
     function deleteEmploye($id)
     {
-        $bdd = mysqli_init();
-        mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-        $insert = mysqli_query($bdd, "DELETE FROM employes WHERE noemp='$id';");
-        mysqli_close($bdd);
+        $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
+        $stmt = $mysqli->prepare("DELETE FROM employes WHERE noemp=?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $mysqli->close();
     }
 
 
@@ -38,18 +47,6 @@ session_start();
     } else {
         header('Location: site_gestion_personnel.php');
     }
-
-
-    $bdd = mysqli_init();
-    mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-    $insert = mysqli_query($bdd, "DELETE FROM employes WHERE noemp='$_GET[id]';");
-
-
-
-
-
-
-
     ?>
 
 

@@ -29,39 +29,39 @@ session_start();
 
             <div class=" mb-3">
                 <label for="noemp" class="form-label">Numéro employé :</label>
-                <input type="text" class="form-control" id="noemp" name="noemp" value="<?php echo $tab[0]['noemp'] ?>">
+                <input type="text" class="form-control" id="noemp" name="noemp" value="<?php echo $tab['noemp'] ?>">
             </div>
             <div class=" mb-3">
                 <label for="nom" class="form-label">Nom :</label>
-                <input type="text" class="form-control" id="nom" name="nom" value="<?php echo $tab[0]['nom'] ?>">
+                <input type="text" class="form-control" id="nom" name="nom" value="<?php echo $tab['nom'] ?>">
             </div>
             <div class=" mb-3">
                 <label for="prenom" class="form-label">Prenom :</label>
-                <input type="text" class="form-control" id="prenom" name="prenom" value="<?php echo $tab[0]['prenom'] ?>">
+                <input type="text" class="form-control" id="prenom" name="prenom" value="<?php echo $tab['prenom'] ?>">
             </div>
             <div class=" mb-3">
                 <label for="emploi" class="form-label">Emploi :</label>
-                <input type="text" class="form-control" id="emploi" name="emploi" value="<?php echo $tab[0]['emploi'] ?>">
+                <input type="text" class="form-control" id="emploi" name="emploi" value="<?php echo $tab['emploi'] ?>">
             </div>
             <div class="mb-3">
                 <label for="sup" class="form-label">Numéro du supérieur :</label>
-                <input type="text" class="form-control" id="sup" name="sup" value="<?php echo $tab[0]['sup'] ?>">
+                <input type="text" class="form-control" id="sup" name="sup" value="<?php echo $tab['sup'] ?>">
             </div>
             <div class="mb-3">
                 <label for="embauche" class="form-label">Date Embauche :</label>
-                <input disabled="disabled" type="text" class="form-control" id="embauche" name="embauche" value="<?php echo $tab[0]['embauche'] ?>">
+                <input disabled="disabled" type="text" class="form-control" id="embauche" name="embauche" value="<?php echo $tab['embauche'] ?>">
             </div>
             <div class="mb-3">
                 <label for="sal" class="form-label">Salaire :</label>
-                <input type="text" class="form-control" id="sal" name="sal" value="<?php echo $tab[0]['sal'] ?>">
+                <input type="text" class="form-control" id="sal" name="sal" value="<?php echo $tab['sal'] ?>">
             </div>
             <div class="mb-3">
                 <label for="comm" class="form-label">Commission :</label>
-                <input type="text" class="form-control" id="comm" name="comm" value="<?php echo $tab[0]['comm'] ?>">
+                <input type="text" class="form-control" id="comm" name="comm" value="<?php echo $tab['comm'] ?>">
             </div>
             <div class="mb-3">
                 <label for="noserv" class="form-label">Numéro de votre service :</label>
-                <input type="text" class="form-control" id="noserv" name="noserv" value="<?php echo $tab[0]['noserv'] ?>">
+                <input type="text" class="form-control" id="noserv" name="noserv" value="<?php echo $tab['noserv'] ?>">
             </div>
             <div>
                 </pan><button type="submit" class="btn btn-dark">Envoyer</button>
@@ -70,15 +70,39 @@ session_start();
     </form>
 
     <?php
+    // fonction procédurale
+    // function modifierEmploye($id)
+    // {
+    //     $bdd = mysqli_init();
+    //     mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
+    //     $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv FROM employes WHERE noemp='$id';");
+    //     $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    //     mysqli_close($bdd);
+    //     return $tab;
+    // }
+
+    //fonction orientée objet
     function modifierEmploye($id)
     {
-        $bdd = mysqli_init();
-        mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-        $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv FROM employes WHERE noemp='$id';");
-        $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        mysqli_close($bdd);
+        // $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
+        // $sql = "SELECT noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv FROM employes WHERE noemp='$id';";
+        // $rs = $mysqli->query($sql);
+        // $tab = $rs->fetch_all(MYSQLI_ASSOC);
+        // return $tab;
+        // $rs->free();
+        // $mysqli->close();
+
+        $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
+        $stmt = $mysqli->prepare("SELECT noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv FROM employes WHERE noemp=?;");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $rs = $stmt->get_result();
+        $tab = $rs->fetch_array(MYSQLI_ASSOC);
+        $rs->free();
+        $mysqli->close();
         return $tab;
     }
+
     ?>
 
 

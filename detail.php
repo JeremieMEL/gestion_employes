@@ -43,22 +43,22 @@ session_start();
 
 
             <?php
-            for ($i = 0; $i < count($tab); $i++) {
+            // for ($i = 0; $i < count($tab); $i++) {
 
-                echo "<tr>";
-                echo "<td>" . $tab[$i]['noemp'] . "</td>";
-                echo "<td>" . $tab[$i]['nom'] . "</td>";
-                echo "<td>" . $tab[$i]['prenom'] . "</td>";
-                echo "<td>" . $tab[$i]['emploi'] . "</td>";
-                echo "<td>" . $tab[$i]['sup'] . "</td>";
-                echo "<td>" . $tab[$i]['embauche'] . "</td>";
-                echo "<td>" . $tab[$i]['sal'] . "</td>";
-                echo "<td>" . $tab[$i]['comm'] . "</td>";
-                echo "<td>" . $tab[$i]['noserv'] . "</td>";
-                echo "<td><a href='form_modification.php?id=" . $tab[$i]['noemp'] . "'><button class='btn btn-warning'>Modifier</button></a></td>";
-                echo "<td><a href='supprimer.php?id=" . $tab[$i]['noemp'] . "'><button class='btn btn-warning'>Supprimer</button></a></td>";
-                echo "</tr>";
-            }
+            echo "<tr>";
+            echo "<td>" . $tab['noemp'] . "</td>";
+            echo "<td>" . $tab['nom'] . "</td>";
+            echo "<td>" . $tab['prenom'] . "</td>";
+            echo "<td>" . $tab['emploi'] . "</td>";
+            echo "<td>" . $tab['sup'] . "</td>";
+            echo "<td>" . $tab['embauche'] . "</td>";
+            echo "<td>" . $tab['sal'] . "</td>";
+            echo "<td>" . $tab['comm'] . "</td>";
+            echo "<td>" . $tab['noserv'] . "</td>";
+            echo "<td><a href='form_modification.php?id=" . $tab['noemp'] . "'><button class='btn btn-warning'>Modifier</button></a></td>";
+            echo "<td><a href='supprimer.php?id=" . $tab['noemp'] . "'><button class='btn btn-warning'>Supprimer</button></a></td>";
+            echo "</tr>";
+            // }
             ?>
 
         </table>
@@ -69,12 +69,28 @@ session_start();
     </div>
 
     <?php
+    // Fonction procédurale
+    // function detail($id)
+    // {
+    //     $bdd = mysqli_init();
+    //     mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
+    //     $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv FROM employes WHERE noemp='$id';");
+    //     $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    //     return $tab;
+    // }
+
+    // Fonction Orientée Objet
     function detail($id)
     {
-        $bdd = mysqli_init();
-        mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-        $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv FROM employes WHERE noemp='$id';");
-        $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+        $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
+        $stmt = $mysqli->prepare("SELECT noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv FROM employes WHERE noemp=?;");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $rs = $stmt->get_result();
+        $tab = $rs->fetch_array(MYSQLI_ASSOC);
+        $rs->free();
+        $mysqli->close();
         return $tab;
     }
     ?>

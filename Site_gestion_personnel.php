@@ -79,19 +79,39 @@ session_start();
 
             function selectAll()
             {
-                $bdd = mysqli_init();
-                mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-                $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, noserv, date_ajout FROM employes;");
-                $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
+                $sql = "SELECT noemp, nom, prenom, emploi, sup, noserv, date_ajout FROM employes;";
+                $rs = $mysqli->query($sql);
+                $tab = $rs->fetch_all(MYSQLI_ASSOC);
                 return $tab;
+                $rs->free();
+                $mysqli->close();
+
+
+                // $bdd = mysqli_init();
+                // mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
+                // $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, noserv, date_ajout FROM employes;");
+                // $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                // return $tab;
             }
 
             function selectSup()
             {
-                $bdd = mysqli_init();
-                mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-                $sup = mysqli_query($bdd, "SELECT DISTINCT sup FROM employes WHERE sup IS NOT NULL;");
-                $tab = mysqli_fetch_all($sup, MYSQLI_ASSOC);
+                // $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
+                // $sql = "SELECT DISTINCT sup FROM employes WHERE sup IS NOT NULL;";
+                // $rs = $mysqli->query($sql);
+                // $tab = $rs->fetch_all(MYSQLI_ASSOC);
+                // return $tab;
+                // $rs->free();
+                // $mysqli->close();
+
+                $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
+                $stmt = $mysqli->prepare("SELECT DISTINCT sup FROM employes WHERE sup IS NOT NULL;");
+                $stmt->execute();
+                $rs = $stmt->get_result();
+                $tab = $rs->fetch_all(MYSQLI_ASSOC);
+                $rs->free();
+                $mysqli->close();
                 return $tab;
             }
 
