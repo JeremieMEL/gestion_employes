@@ -10,12 +10,16 @@ session_start();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="mystyle.css">
+    <link rel="stylesheet" href="./css/mystyle.css">
     <title>BDD personnel</title>
 </head>
 
 <body>
     <?php
+    include_once(__DIR__ . './DAO/EmployeDAO.php');
+    include_once(__DIR__ . './Model/Employe.php');
+
+
     if (!isset($_SESSION['email'])) {
         header('Location: form_connexion.php');
     }
@@ -24,18 +28,6 @@ session_start();
     <div class=CTAS>
         <a class="btn btn-dark btn-sm" href="deconnexion.php"> Se déconnecter</a>
     </div>
-
-    <?php
-    $tab = selectAll();
-
-    // $bdd = mysqli_init();
-    // mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-    // $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, noserv, date_ajout FROM employes;");
-    // $sup = mysqli_query($bdd, "SELECT DISTINCT sup FROM employes WHERE sup IS NOT NULL;");
-    // $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    // $tab2 = mysqli_fetch_all($sup, MYSQLI_ASSOC);
-    //var_dump($tab2);
-    ?>
 
     <div class="content">
         <table class="table table-dark table-striped">
@@ -48,9 +40,10 @@ session_start();
                 <th>N° service</th>
             </tr>
 
-
             <?php
 
+            $employeDAO = new EmployeDAO();
+            $tab = $employeDAO->selectAll();
 
             for ($i = 0; $i < count($tab); $i++) {
 
@@ -65,38 +58,6 @@ session_start();
                 echo "</tr>";
             }
 
-            //Fonction procédurale
-            // function selectAll()
-            // {
-            //     $bdd = mysqli_init();
-            //     mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-            //     $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, noserv, date_ajout FROM employes;");
-            //     $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
-            //     return $tab;
-            // }
-
-            // Fonction Orientée Objet
-
-            function selectAll()
-            {
-                // $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
-                // $sql = "SELECT noemp, nom, prenom, emploi, sup, noserv, date_ajout FROM employes;";
-                // $rs = $mysqli->query($sql);
-                // $tab = $rs->fetch_all(MYSQLI_ASSOC);
-                // return $tab;
-                // $rs->free();
-                // $mysqli->close();
-
-                $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
-                $stmt = $mysqli->prepare("SELECT noemp, nom, prenom, emploi, sup, noserv, date_ajout FROM employes;");
-                $stmt->execute();
-                $rs = $stmt->get_result();
-                $tab = $rs->fetch_all(MYSQLI_ASSOC);
-                $rs->free();
-                $mysqli->close();
-                return $tab;
-            }
-
             ?>
 
         </table>
@@ -105,14 +66,7 @@ session_start();
     <div class="content">
         <table class="table table-dark table-striped">
             <?php
-            $bdd = mysqli_init();
-            mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-            $query3 = mysqli_query($bdd, "SELECT COUNT(date_ajout) FROM employes WHERE date_ajout = DATE_FORMAT(SYSDATE(),'%Y-%m-%d');");
-            $tab3 = mysqli_fetch_all($query3, MYSQLI_ASSOC);
-            foreach ($tab3 as $number) {
-                $resultCount[] = $number['COUNT(date_ajout)'];
-            }
-            echo "<td>Nombre d'ajout aujourd'hui: " . $resultCount[0] . "</td>";
+            echo "<td>Nombre d'ajout aujourd'hui: " . $employeDAO->countAdding() . "</td>";
             ?>
         </table>
     </div>

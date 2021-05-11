@@ -10,19 +10,22 @@ session_start();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="mystyle.css">
+    <link rel="stylesheet" href="./css/mystyle.css">
     <title>BDD personnel</title>
 </head>
 
 <body>
 
     <?php
+    include(__DIR__ . './DAO/EmployeDAO.php');
+
     if (!isset($_SESSION['email'])) {
         header('Location: form_connexion.php');
     }
 
-    $tab = detail($_GET['id']);
 
+    $employeDAO = new EmployeDAO();
+    $tab = $employeDAO->detail($_GET['id']);
 
     ?>
 
@@ -43,8 +46,6 @@ session_start();
 
 
             <?php
-            // for ($i = 0; $i < count($tab); $i++) {
-
             echo "<tr>";
             echo "<td>" . $tab['noemp'] . "</td>";
             echo "<td>" . $tab['nom'] . "</td>";
@@ -58,7 +59,6 @@ session_start();
             echo "<td><a href='form_modification.php?id=" . $tab['noemp'] . "'><button class='btn btn-warning'>Modifier</button></a></td>";
             echo "<td><a href='supprimer.php?id=" . $tab['noemp'] . "'><button class='btn btn-warning'>Supprimer</button></a></td>";
             echo "</tr>";
-            // }
             ?>
 
         </table>
@@ -67,33 +67,6 @@ session_start();
     <div class=CTA2>
         <a class="btn btn-dark btn-sm" href="Site_gestion_personnel.php"> Revenir à la liste</a>
     </div>
-
-    <?php
-    // Fonction procédurale
-    // function detail($id)
-    // {
-    //     $bdd = mysqli_init();
-    //     mysqli_real_connect($bdd, "127.0.0.1", "root", "", "employes_bdd");
-    //     $result = mysqli_query($bdd, "SELECT noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv FROM employes WHERE noemp='$id';");
-    //     $tab = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    //     return $tab;
-    // }
-
-    // Fonction Orientée Objet
-    function detail($id)
-    {
-
-        $mysqli = new mysqli('127.0.0.1', 'root', '', 'employes_bdd');
-        $stmt = $mysqli->prepare("SELECT noemp, nom, prenom, emploi, sup, embauche, sal, comm, noserv FROM employes WHERE noemp=?;");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $rs = $stmt->get_result();
-        $tab = $rs->fetch_array(MYSQLI_ASSOC);
-        $rs->free();
-        $mysqli->close();
-        return $tab;
-    }
-    ?>
 
 </body>
 
